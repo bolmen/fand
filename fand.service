@@ -1,0 +1,11 @@
+[Unit]
+Description=fand: fan controller for Raspberry cm4io boards
+
+[Service]
+User=root
+WorkingDirectory=/var/lib/fand
+ExecStart=/var/lib/fand/fand
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
