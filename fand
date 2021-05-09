@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+import time
+import smbus
+import logging
+
+debug = False
+
+def main_loop(logf, mapf):
+	global debug
+
+	logger = logging.getLogger('fand')
+	logger.setLevel(logging.INFO)
+
+	log_fh = logging.FileHandler(logf)
+	log_fh.setLevel(logging.INFO)
+
+	format_str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+	formatter = logging.Formatter(format_str)
+
+	log_fh.setFormatter(formatter)
+	logger.addHandler(log_fh)
+
+	logger.info('Staring with {} as temperature map.'.format(mapf))
+
+
+	# These seettings work for the Raspberry cm4io board and the EMC2301 controller
+	i2cbus = smbus.SMBus(10)
+	chip_address = 0x2f
+	fan_setting_reg = 0x30
+
+	sleep_period = 15
+	temp_fan_map = dict()
+
+	def set_fan_output(output):
+		i2cbus.write_byte_data(chip_address, fan_setting_reg, output)
+
+	def get_fan_output():
+		return (i2cbus.read_byte_data(chip_address, fan_setting_reg))
+
+	def get_cpu_temp():
+		with open('/sys/class/thermal/thermal_zone0/temp', 'r') as temp_fh:
+			cpu_temp = int(int(temp_fh.readline()) / 1000)
+		return cpu_temp
+
+	# Read the temp-to-fan map
+	with open('default.map') as raw_data:
+		for line in raw_data:
+			if ':' in line:
+				key, value = line.split(':', 1)
+				temp_fan_map[int(key)] = int(value)
+			else:
+				pass # Ignore commets
+		logger.info('Added {} temp:fan value pairs.'.format(len(temp_fan_map)))
+
+	# The "work" part
+	while True:
+		cpu_temp = get_cpu_temp()
+
+		if cpu_temp < min(temp_fan_map):
+			new_fan_output = 0
+		elif cpu_temp > max(temp_fan_map):
+			new_fan_output = 255
+		else:
+			new_fan_output = temp_fan_map[cpu_temp]
+
+		set_fan_output(new_fan_output)
+
+		if debug:
+			logger.info('CPU temp: {}, new fan output: {}'.format(get_cpu_temp(), new_fan_output))
+
+		time.sleep(sleep_period)
+
+main_loop('/var/log/fand.log', 'default.map')
