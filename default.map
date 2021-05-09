@@ -1,0 +1,39 @@
+#
+# Simple temperature map - just an example that works well with my 40mm Noctua fan
+#
+# Colon-separated pairs define CPU temperature in degree Celsius and fan-output (0..255)
+#
+# if tempreature values are below 45 the fan is turned off
+# 11 is the lowest value for my Noctua to (re)start reliably
+45:11
+46:13
+47:16
+48:19
+49:23
+50:28
+51:32
+52:38
+53:44
+54:50
+55:56
+56:63
+57:71
+58:78
+59:86
+60:94
+61:103
+62:112
+63:121
+64:131
+65:140
+66:151
+67:161
+68:172
+69:182
+70:194
+71:205
+72:217
+73:229
+74:241
+75:253
+# temperature values higher than 75 degrees will run the fan at full speed, i.e. 255
