@@ -1,8 +1,8 @@
 # fand
-Daemon to control fan speed on Raspberry Compute Module 4 IO Board
+Daemon to control fan speed on a Raspberry Compute Module 4 IO Board
 
 This is a small proof of concept for controlling the fan effect depending on the CPU temperature.
-It works with Raspberry Compute Module 4 IO boards and supports standard +12V FANs with PWM drive.
+It works with Raspberry Compute Module 4 IO boards and supports standard 12V FANs with PWM drive.
 The code is written in python and sets the fan speed by addressing the EMC2301 controller on the io board. Fan effect depends on CPU temparature and the temp/effect pairs are looked up in a simple config file. This works very well with my overklocked cm4 and a 40mm Noctua fan in a small enclousure. You can easily edit the mapping in the config file to fit your scenario.
 
 I have this setup running 24/7 and CPU temperature is nicely maintained by the deamon. Setting all 4 cores to 100% with overvoltage (6) and 2ghz for 10 hours worked flawlessly.
@@ -19,7 +19,9 @@ My system is based on a 64bit Ubuntu desktop distro.
 
 The python libraries time, smbus and logging are used.
 
-How to install (using sudo):
+## How to install
+
+You have to do the steps below as root, i.e. use the sudo command
 
 1. Create the **/var/lib/fand** directory
 2. Copy the files fand and default.map to **/var/lib/fand**
