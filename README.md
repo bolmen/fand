@@ -21,12 +21,12 @@ The python libraries time, smbus and logging are used.
 
 How to install (using sudo):
 
-1. Create the /var/lib/fand directory
-2. Copy the files fand and default.map to /var/lib/fand
-3. Copy the file fand.service to the /etc/systemd/system directory
-4. Do a systemctl daemon-reload
-5. Do a systemctl enable fand to enable the daemon
-6. Check with systemctl status fand
+1. Create the **/var/lib/fand** directory
+2. Copy the files fand and default.map to **/var/lib/fand**
+3. Copy the file **fand.service** to the **/etc/systemd/system directory**
+4. Do a **systemctl daemon-reload**
+5. Do a **systemctl enable fand** to enable the daemon
+6. Check with **systemctl status fand**
 
 If the daemon is installed correctly and running the result of systemctl status fand should look like:
 
@@ -40,3 +40,9 @@ If the daemon is installed correctly and running the result of systemctl status 
              └─734 python3 /var/lib/fand/fand
 
 It starts automatically when booting the system.
+
+You can check how it works by using a simple shell command: **sudo watch -n 10 'vcgencmd measure_temp; i2cget -y 10 0x2f 0x30 | xargs printf "fan=%d"'**
+
+
+Enjoy,
+Tim
