@@ -23,12 +23,19 @@ The python libraries time, smbus and logging are used.
 
 You have to do the steps below as root, i.e. use the sudo command
 
-1. Create the **/var/lib/fand** directory
-2. Copy the files fand and default.map to **/var/lib/fand**
-3. Copy the file **fand.service** to the **/etc/systemd/system directory**
-4. Do a **systemctl daemon-reload**
-5. Do a **systemctl enable fand** to enable the daemon
-6. Check with **systemctl status fand**
+1. Activate I2C:
+     **sudo raspi-config**
+     Select Advanced Options -> I2C -> to enable the I2C driver.
+2. Install missing packages:
+     **apt install python3-smbus**
+4. Create the **/var/lib/fand** directory
+5. Copy the files fand and default.map to **/var/lib/fand**
+6. Make the program executable:
+     **chmod u + x /var/lib/fand/fand**
+7. Copy the file **fand.service** to the **/etc/systemd/system directory**
+8. Do a **systemctl daemon-reload**
+9. Do a **systemctl enable fand** to enable the daemon
+10. Check with **systemctl status fand**
 
 If the daemon is installed correctly and running the result of systemctl status fand should look like:
 
